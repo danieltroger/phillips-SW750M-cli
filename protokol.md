@@ -27,6 +27,10 @@ Min: `value=0`
 
 Max: `value=51`
 
+# Get now playing
+
+`GET /fsapi/GET/netRemote.play.info.name?pin=1234`
+
 # Mute:
 
 Example: `GET /fsapi/SET/netRemote.sys.audio.mute?pin=1234&value=1`
@@ -65,22 +69,51 @@ E..*%.@.@..T...'.......Pa..+...%P.@.(#..GET /fsapi/SET/netRemote.sys.isu.control
 E.. 3.@.@. ....'.......P.....mq.P.@.....GET /fsapi/GET/netRemote.sys.isu.state?pin=1234 HTTP/1.1
 ```
 
-# Just what happens when you open the app:
+# Just what happens when you open the app (commented):
+
+`k:/tmp root# tcpdump -A -s 1492 dst port 80|grep GET`
+
+`E.....@.@......'.......P)];./..HP.@.J...GET /fsapi/GET/netRemote.sys.power?pin=1234 HTTP/1.1`
+
+Check if speaker is turned on? Basically returns 1
+
+`E..!.,@.@.p....'.......Pr.,...._P.@.q...GET /fsapi/GET/netRemote.sys.audio.mute?pin=1234 HTTP/1.1`
+
+Returns mute status (1 or 0)
+
+`E.. ..@.@......'.......P6..0....P.@..n..GET /fsapi/GET/netRemote.sys.isu.state?pin=1234 HTTP/1.1`
+
+Returns 0
+
+`E..!..@.@.{....'.......P...g....P.@..m..GET /fsapi/GET/netRemote.play.info.name?pin=1234 HTTP/1.1`
+
+Returns now playing
+
+`E..$LZ@.@......'.......P@@]..fz.P.@.O...GET /fsapi/GET/netRemote.sys.net.wlan.rssi?pin=1234 HTTP/1.1`
+
+Returns rssi
+
+`O......P.@.Zj..GET /fsapi/GET/netRemote.multiroom.group.id?pin=1234 HTTP/1.1`
+
+Returns some empty array?
+
+`E..'v.@.@......'.......Pw.....\_P.@.)...GET /fsapi/GET/netRemote.multiroom.group.name?pin=1234 HTTP/1.1`
+
+In my case: `FS_NODE_DOES_NOT_EXIST`
+
+`E../.	@.@..(...'.......P.o......P.@.....GET /fsapi/GET/netRemote.multiroom.group.becomeServer?pin=1234 HTTP/1.1`
+
+Returns 0
+
+`E../.A@.@.Z....'.......P.g.K.."cP.@.3...GET /fsapi/GET/netRemote.multiroom.device.clientIndex?pin=1234 HTTP/1.1`
+
+`FS_NODE_DOES_NOT_EXIST`
+
+`E..1z.@.@..B...'.......P..=J.D..P.@..!..GET /fsapi/GET/netRemote.multiroom.caps.protocolVersion?pin=1234 HTTP/1.1`
+
+Returns 1
 
 ```
-k:/tmp root# tcpdump -A -s 1492 dst port 80|grep GET
-tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
-listening on en0, link-type EN10MB (Ethernet), capture size 1492 bytes
-E.....@.@......'.......P)];./..HP.@.J...GET /fsapi/GET/netRemote.sys.power?pin=1234 HTTP/1.1
-E..!.,@.@.p....'.......Pr.,...._P.@.q...GET /fsapi/GET/netRemote.sys.audio.mute?pin=1234 HTTP/1.1
-E.. ..@.@......'.......P6..0....P.@..n..GET /fsapi/GET/netRemote.sys.isu.state?pin=1234 HTTP/1.1
-E..!..@.@.{....'.......P...g....P.@..m..GET /fsapi/GET/netRemote.play.info.name?pin=1234 HTTP/1.1
-E..$LZ@.@......'.......P@@]..fz.P.@.O...GET /fsapi/GET/netRemote.sys.net.wlan.rssi?pin=1234 HTTP/1.1
-O......P.@.Zj..GET /fsapi/GET/netRemote.multiroom.group.id?pin=1234 HTTP/1.1
-E..'v.@.@......'.......Pw.....\_P.@.)...GET /fsapi/GET/netRemote.multiroom.group.name?pin=1234 HTTP/1.1
-E../.	@.@..(...'.......P.o......P.@.....GET /fsapi/GET/netRemote.multiroom.group.becomeServer?pin=1234 HTTP/1.1
-E../.A@.@.Z....'.......P.g.K.."cP.@.3...GET /fsapi/GET/netRemote.multiroom.device.clientIndex?pin=1234 HTTP/1.1
-E..1z.@.@..B...'.......P..=J.D..P.@..!..GET /fsapi/GET/netRemote.multiroom.caps.protocolVersion?pin=1234 HTTP/1.1
 E....J@.@.V....'.......P.9.. ...P.@.....GET /fsapi/GET/netRemote.play.status?pin=1234 HTTP/1.1
 E..!..@.@._....'.......P.d....thP.@.w*..GET /fsapi/GET/netRemote.play.info.name?pin=1234 HTTP/1.1
 E...).@.@.*]...'.......P.%..#.~.P.@.....GET /fsapi/GET/netRemote.sys.power?pin=1234 HTTP/1.1
