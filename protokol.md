@@ -111,3 +111,7 @@ E....(@.@......'.......Pew....Q.P.@.....GET /fsapi/GET/netRemote.play.status?pin
 E..!.b@.@......'.......P$i.I.`..P.@.....GET /fsapi/GET/netRemote.sys.audio.mute?pin=1234 HTTP/1.1
 ...'.......P~..	.RS~P.@.....GET /fsapi/GET/netRemote.sys.power?pin=1234 HTTP/1.1
 ```
+
+## Awesome command to dump everything
+
+`tcpdump -A -s 0 'src 192.168.178.30 or dst 192.168.178.30 and tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'`
